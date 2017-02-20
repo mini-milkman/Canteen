@@ -2,6 +2,9 @@ from django.db import models
 
 
 class Setting(models.Model):
+    class Meta:
+        verbose_name_plural = "设置"
+
     name = models.CharField(
         verbose_name="设置项",
         max_length=100,
@@ -14,6 +17,9 @@ class Setting(models.Model):
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = "商品分类"
+
     category_name = models.CharField(
         verbose_name="分类名称",
         max_length=50
@@ -21,6 +27,9 @@ class Category(models.Model):
 
 
 class Goods(models.Model):
+    class Meta:
+        verbose_name_plural = "商品"
+
     # 商品所在平台选项
     PLATFORM_TYPE_CHOICES = (
         ("淘宝", "淘宝"),
