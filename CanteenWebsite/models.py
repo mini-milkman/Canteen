@@ -30,7 +30,7 @@ class Goods(models.Model):
 
     category = models.ForeignKey(
         verbose_name="商品一级类目",
-        category=Category,
+        to=Category,
         on_delete=models.CASCADE
     )
     id = models.BigIntegerField(
