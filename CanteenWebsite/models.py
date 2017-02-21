@@ -15,6 +15,9 @@ class Setting(models.Model):
         blank=True
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     class Meta:
@@ -24,6 +27,9 @@ class Category(models.Model):
         verbose_name="分类名称",
         max_length=50
     )
+
+    def __str__(self):
+        return self.category_name
 
 
 class Goods(models.Model):
@@ -106,3 +112,6 @@ class Goods(models.Model):
         verbose_name="商品优惠券推广链接",
         blank=True
     )
+
+    def __str__(self):
+        return self.name
