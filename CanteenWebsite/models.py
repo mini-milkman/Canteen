@@ -73,7 +73,7 @@ class Goods(models.Model):
         editable=False
     )
     commission_rate = models.FloatField(
-        verbose_name="佣金比率(%)",
+        verbose_name="收入比率(%)",
         default=0
     )
     commission = models.FloatField(
