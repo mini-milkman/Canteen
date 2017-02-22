@@ -30,8 +30,18 @@ def parse_discount(coupon_str):
     return condition, discount
 
 
-def real_price(price, coupon_str):
+def calculate_real_price(price, coupon_str):
     condition, discount = parse_discount(coupon_str)
     if price >= condition:
         price -= discount
     return max(price, 0)
+
+
+def value_set_select(key, value_set, default, wrapper):
+    v = default
+    if key is not None:
+        try:
+            v = wrapper(value_set[key])
+        except:
+            pass
+    return v

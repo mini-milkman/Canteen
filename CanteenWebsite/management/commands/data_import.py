@@ -1,6 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from CanteenWebsite.models import Category, Goods
+from CanteenWebsite.functions.data_import import XlsDataImporter
 
 
 class Command(BaseCommand):
@@ -12,12 +13,12 @@ class Command(BaseCommand):
         parser.add_argument('--delete', action='store_true', help="清空现有数据库")
 
     def handle(self, *args, **options):
-        print(options)
-
+        importer = XlsDataImporter()
         for filename in options['filename']:
-            print(filename)
-            counter_category, counter_items = [1, 2]
-
-            self.stdout.write(self.style.SUCCESS('文件： %s' % filename))
-            self.stdout.write(self.style.SUCCESS('分类数： %s' % counter_category))
-            self.stdout.write(self.style.SUCCESS('商品数： %s' % counter_items))
+            try:
+                counter_category, counter_items = importer.import_data(filename)
+                self.stdout.write(self.style.SUCCESS('文件： %s' % filename))
+                self.stdout.write(self.style.SUCCESS('分类数： %s' % counter_category))
+                self.stdout.write(self.style.SUCCESS('商品数： %s' % counter_items))
+            except:
+                self.stdout.write(self.style.ERROR('文件 %s 导入出错' % filename))
