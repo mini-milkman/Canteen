@@ -21,7 +21,6 @@ def parse_discount(coupon_str):
     discount = 0
     for _, discounter in DISCOUNT_TYPE.items():
         result = discounter["reg"].match(coupon_str)
-        print(discounter["reg"])
         if result:
             groups = result.groups()
             if discounter["condition"] is not None:

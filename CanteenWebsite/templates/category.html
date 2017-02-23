@@ -9,30 +9,29 @@
 
 {% block content %}
     <div class="row">
-        {% if category.goods_set.count %}
-            {% for goods in category.goods_set.all %}
-                <div class="col s6 m6 l4">
-                    <div class="card medium hoverable">
-                        <div class="card-image">
-                            <img src="{{ goods.picture }}">
-                        </div>
-                        <div class="card-content">
-                            <span class="badge">券后 {{ goods.price_real }} </span>
-                            <span class="chip">{{ goods.platform_type }}</span>
-                            <span>{{ goods.name }}</span>
-                            {{ goods.coupon_money }}
-                        </div>
-                        <div class="card-action">
-                            <a class="hide-on-med-and-down" href="{{ goods.url_coupon }}" target="_blank">去领券</a>
-                            <a class="hide-on-med-and-down" href="{{ goods.url_affiliate }}" target="_blank">去购买</a>
-                            <a class="hide-on-large-only" href="{{ goods.url_affiliate_coupon }}"
-                               target="_blank">领券并购买</a>
-                        </div>
+        {% for goods in category.goods_set.all %}
+            <div class="col s6 m6 l4">
+                <div class="card medium hoverable">
+                    <div class="card-image">
+                        <img src="{{ goods.picture }}">
+                    </div>
+                    <div class="card-content">
+                        <span class="badge">券后 {{ goods.price_real }} </span>
+                        <span class="chip">{{ goods.platform_type }}</span>
+                        <span>{{ goods.name }}</span>
+                        {{ goods.coupon_money }}
+                    </div>
+                    <div class="card-action">
+                        <a class="hide-on-med-and-down" href="{{ goods.url_coupon }}" target="_blank">去领券</a>
+                        <a class="hide-on-med-and-down" href="{{ goods.url_affiliate }}" target="_blank">去购买</a>
+                        <a class="hide-on-large-only" href="{{ goods.url_affiliate_coupon }}"
+                           target="_blank">领券并购买</a>
                     </div>
                 </div>
-            {% endfor %}
-        {% else %}
+            </div>
+        {% empty %}
             此分类内没有商品
-        {% endif %}
+        {% endfor %}
+
     </div>
 {% endblock %}
