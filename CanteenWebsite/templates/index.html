@@ -1,1 +1,12 @@
-Hello World!
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}首页 - {{ block.super }}{% endblock %}
+
+{% block page_title %}
+    最新商品
+{% endblock %}
+
+{% block content %}
+    Hello World!
+{% endblock %}
