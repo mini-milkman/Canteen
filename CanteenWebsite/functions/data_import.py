@@ -7,47 +7,47 @@ import datetime
 
 
 class DataImporter:
-    COLUMNS = ['商品id',
-               '商品名称',
-               '商品主图',
-               '商品一级类目',
-               '淘宝客链接',
-               '商品价格(单位：元)',
-               '收入比率(%)',
-               '佣金',
-               '店铺名称',
-               '平台类型',
-               '优惠券面额',
-               '优惠券开始时间',
-               '优惠券结束时间',
-               '优惠券链接',
-               '商品优惠券推广链接'],
+    COLUMNS = ['id',
+               'name',
+               'picture',
+               'category',
+               'url_affiliate',
+               'price',
+               'commission_rate',
+               'commission',
+               'shop_name',
+               'platform_type',
+               'coupon_money',
+               'coupon_time_start',
+               'coupon_time_end',
+               'url_coupon',
+               'url_affiliate_coupon'],
 
     def import_data(self, data_source, title):
         """
         从数据源中导入数据
         """
-        index = self.__match_title(title)
+        index = self._match_title(title)
         # 导入数据
-        counter_category, counter_goods = self.__import_data(data_source, index)
+        counter_category, counter_goods = self._import_data(data_source, index)
 
         # 返回结果
         return counter_category, counter_goods
 
-    def __match_title(self, title):
+    def _match_title(self, title_index):
         """
-        匹配给出的title和需要的title
+        需要的title在给出数据的第几列？制作一个对应关系表
         """
+        # 补齐
+        while len(title_index) < len(self.__class__.COLUMNS):
+            title_index.append(None)
+        # 作出对应关系表
         result = dict()
-        for x in self.__class__.COLUMNS:
-            if x in title:
-                result[x] = title.index(x)
-            else:
-                result[x] = None
-
+        for ith, x in enumerate(self.__class__.COLUMNS[0]):
+            result[x] = title_index[ith]
         return result
 
-    def __import_data(self, data, index):
+    def _import_data(self, data, index):
         """
         导入数据
         这里 data 使用 numpy 数据格式
@@ -57,7 +57,7 @@ class DataImporter:
         for item in data:
             try:
                 # Category比较少，可以进行一个缓存，避免太频繁读取数据库
-                item_category = value_set_select(index["商品一级类目"], item, None, str)
+                item_category = value_set_select(index["category"], item, None, str)
                 if item_category is None:
                     continue
                 if item_category in category_cache:
@@ -67,37 +67,37 @@ class DataImporter:
                     category.save()
                     category_cache[item_category] = category
                 # 继续拿其他信息
-                goods_price = value_set_select(index["商品价格(单位：元)"], item, 0, float)
-                goods_coupon_money = value_set_select(index["优惠券面额"], item, "", str)
+                goods_price = value_set_select(index["price"], item, 0, float)
+                goods_coupon_money = value_set_select(index["coupon_money"], item, "", str)
                 # 写进数据库
                 try:
                     category.goods_set.create(
-                        id=int(item[index["商品id"]]),
-                        name=str(item[index["商品名称"]]),
-                        picture=str(item[index["商品主图"]]),
-                        url_affiliate=str(item[index["淘宝客链接"]]),
-                        price=float(item[index["商品价格(单位：元)"]]),
-                        commission_rate=value_set_select(index["收入比率(%)"], item, 0, float),
-                        commission=value_set_select(index["佣金"], item, 0, float),
-                        shop_name=value_set_select(index["店铺名称"], item, "", str),
-                        platform_type=value_set_select(index["平台类型"], item, "其他", str),
-                        coupon_money=value_set_select(index["优惠券面额"], item, "", str),
-                        coupon_time_start=value_set_select(index["优惠券开始时间"], item,
+                        id=int(item[index["id"]]),
+                        name=str(item[index["name"]]),
+                        picture=str(item[index["picture"]]),
+                        url_affiliate=str(item[index["url_affiliate"]]),
+                        price=float(item[index["price"]]),
+                        commission_rate=value_set_select(index["commission_rate"], item, 0, float),
+                        commission=value_set_select(index["commission"], item, 0, float),
+                        shop_name=value_set_select(index["shop_name"], item, "", str),
+                        platform_type=value_set_select(index["platform_type"], item, "其他", str),
+                        coupon_money=value_set_select(index["coupon_money"], item, "", str),
+                        coupon_time_start=value_set_select(index["coupon_time_start"], item,
                                                            datetime.date.today(),
                                                            date_parse),
-                        coupon_time_end=value_set_select(index["优惠券结束时间"], item,
+                        coupon_time_end=value_set_select(index["coupon_time_end"], item,
                                                          datetime.date.today() + datetime.timedelta(days=30),
                                                          date_parse),
-                        url_coupon=value_set_select(index["优惠券链接"], item, "", str),
-                        url_affiliate_coupon=value_set_select(index["商品优惠券推广链接"], item, "", str),
+                        url_coupon=value_set_select(index["url_coupon"], item, "", str),
+                        url_affiliate_coupon=value_set_select(index["url_affiliate_coupon"], item, "", str),
                         price_real=calculate_real_price(goods_price, goods_coupon_money),
                     )
-                except:
-                    pass
-            except:
-                pass
-        counter_category = 0
-        counter_goods = 0
+                except Exception as e:
+                    print(e)
+            except Exception as e:
+                print(e)
+        counter_category = Category.objects.count()
+        counter_goods = Goods.objects.count()
         return counter_category, counter_goods
 
 
@@ -107,10 +107,13 @@ class XlsDataImporter(DataImporter):
         counter_goods = 0
         if os.path.exists(filename):
             with pd.ExcelFile(filename) as xls_file:
-                data_sheet = xls_file.parse(0)
-                if title is None:
-                    title = [x for x in data_sheet.columns]
-                index = self.__match_title(title)
-                counter_category, counter_goods = self.__import_data(data_sheet.values, index)
+                try:
+                    data_sheet = xls_file.parse(0)
+                    index = self._match_title(title)
+                    counter_category, counter_goods = self._import_data(data_sheet.values, index)
+                except Exception as e:
+                    print(e)
+                    counter_category = Category.objects.count()
+                    counter_goods = Goods.objects.count()
 
         return counter_category, counter_goods

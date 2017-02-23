@@ -2,6 +2,7 @@ import os
 from django.core.management.base import BaseCommand, CommandError
 from CanteenWebsite.models import Category, Goods
 from CanteenWebsite.functions.data_import import XlsDataImporter
+from CanteenWebsite.functions.util import setting_get_json
 
 
 class Command(BaseCommand):
@@ -16,9 +17,10 @@ class Command(BaseCommand):
         importer = XlsDataImporter()
         for filename in options['filename']:
             try:
-                counter_category, counter_items = importer.import_data(filename)
-                self.stdout.write(self.style.SUCCESS('文件： %s' % filename))
-                self.stdout.write(self.style.SUCCESS('分类数： %s' % counter_category))
-                self.stdout.write(self.style.SUCCESS('商品数： %s' % counter_items))
+                self.stdout.write(self.style.SUCCESS('导入文件： %s' % filename))
+                title = setting_get_json("column_index")
+                counter_category, counter_items = importer.import_data(filename, title)
+                self.stdout.write(self.style.SUCCESS('目前分类数： %s' % counter_category))
+                self.stdout.write(self.style.SUCCESS('目前商品数： %s' % counter_items))
             except:
                 self.stdout.write(self.style.ERROR('文件 %s 导入出错' % filename))
