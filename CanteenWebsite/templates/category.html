@@ -9,29 +9,31 @@
 
 {% block content %}
     <div class="row">
-        {% for goods in category.goods_set.all %}
-            <div class="col s6 m6 l4">
-                <div class="card medium hoverable">
-                    <div class="card-image">
-                        <img src="{{ goods.picture }}">
-                    </div>
-                    <div class="card-content">
-                        <span class="badge">券后 {{ goods.price_real }} </span>
-                        <span class="chip">{{ goods.platform_type }}</span>
-                        <span>{{ goods.name }}</span>
-                        {{ goods.coupon_money }}
-                    </div>
-                    <div class="card-action">
-                        <a class="hide-on-med-and-down" href="{{ goods.url_coupon }}" target="_blank">去领券</a>
-                        <a class="hide-on-med-and-down" href="{{ goods.url_affiliate }}" target="_blank">去购买</a>
-                        <a class="hide-on-large-only" href="{{ goods.url_affiliate_coupon }}"
-                           target="_blank">领券并购买</a>
+        {% with goods_list=category.goods_set.all %}
+            {% for goods in category.goods_set.all %}
+                <div class="col s6 m6 l4">
+                    <div class="card medium hoverable">
+                        <div class="card-image">
+                            <img src="{{ goods.picture }}">
+                        </div>
+                        <div class="card-content">
+                            <span class=" chip">券后 <b class="red-text">{{ goods.price_real }}</b> 元 | {{ goods.platform_type }}</span>
+                            <span>{{ goods.name }}</span>
+                            <!-- {{ goods.coupon_money }} -->
+                        </div>
+                        <div class="card-action ">
+                            <a class="btn hide-on-med-and-down left" href="{{ goods.url_coupon }}"
+                               target="_blank"> <i class="material-icons left"></i> 去领券 </a>
+                            <a class="btn hide-on-med-and-down right" href="{{ goods.url_affiliate }}"
+                               target="_blank"> <i class="material-icons left"></i> 去购买 </a>
+                            <a class="btn hide-on-large-only center-align" href="{{ goods.url_affiliate_coupon }}"
+                               target="_blank">领券并购买</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            此分类内没有商品
-        {% endfor %}
-
+            {% empty %}
+                此分类内没有商品
+            {% endfor %}
+        {% endwith %}
     </div>
 {% endblock %}
