@@ -1,14 +1,18 @@
 {% extends "material/frontend/base.html" %}
 {% load i18n static canteen_website_tags %}
 
-{% block title %}Canteen{% endblock %}
+{% block title %}{% get_setting "site_name" %}{% endblock %}
 
 {% block sidenav_header %}
     <li>
         <div class="userView">
             <img class="background" src="{% static 'material/imgs/sidenav.svg' %}">
             <a href="#"><img class="circle" src="{% static 'material/imgs/user.png' %}"></a>
-            <span class="white-text slogan">{% block sidenav_slogan %}{% endblock %}</span>
+            <span class="white-text slogan">
+                {% block sidenav_slogan %}
+                    {% get_setting "site_slogan" %}
+                {% endblock %}
+            </span>
         </div>
     </li>
 {% endblock %}

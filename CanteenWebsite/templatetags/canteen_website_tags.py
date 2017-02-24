@@ -1,7 +1,13 @@
 from django import template
 from CanteenWebsite.models import Category
+from CanteenWebsite.functions.util import setting_get
 
 register = template.Library()
+
+
+@register.simple_tag
+def get_setting(name):
+    return setting_get(name)
 
 
 @register.inclusion_tag('inclusions/sidebar_category_list.html', takes_context=True)
