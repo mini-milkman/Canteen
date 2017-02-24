@@ -33,6 +33,8 @@ class Category(models.Model):
 
 
 class Goods(models.Model):
+    URL_LENGTH = 500
+
     class Meta:
         verbose_name_plural = "商品"
 
@@ -58,10 +60,12 @@ class Goods(models.Model):
     )
     picture = models.URLField(
         verbose_name="商品主图",
+        max_length=URL_LENGTH,
         blank=True
     )
     url_affiliate = models.URLField(
-        verbose_name="淘宝客链接"
+        verbose_name="淘宝客链接",
+        max_length=URL_LENGTH,
     )
     price = models.FloatField(
         verbose_name="商品价格",
@@ -98,6 +102,7 @@ class Goods(models.Model):
     )
     url_coupon = models.URLField(
         verbose_name="优惠券链接",
+        max_length=URL_LENGTH,
         blank=True
     )
     coupon_time_start = models.DateField(
@@ -110,6 +115,7 @@ class Goods(models.Model):
     )
     url_affiliate_coupon = models.URLField(
         verbose_name="商品优惠券推广链接",
+        max_length=URL_LENGTH,
         blank=True
     )
 
