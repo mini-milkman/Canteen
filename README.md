@@ -8,6 +8,7 @@
 1. django
 1. django-material
 1. pandas
+1. tqdm
 
 ## 安装
 

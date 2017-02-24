@@ -1,4 +1,5 @@
 import os
+from tqdm import tqdm
 import pandas as pd
 from CanteenWebsite.models import Category, Goods
 from CanteenWebsite.functions.util import calculate_real_price, value_set_select
@@ -54,48 +55,52 @@ class DataImporter:
         """
         category_cache = dict()
         # 导入
-        for item in data:
-            try:
-                # Category比较少，可以进行一个缓存，避免太频繁读取数据库
-                item_category = value_set_select(index["category"], item, None, str)
-                if item_category is None:
-                    continue
-                if item_category in category_cache:
-                    category = category_cache[item_category]
-                else:
-                    category = Category(category_name=item_category)
-                    category.save()
-                    category_cache[item_category] = category
-                # 继续拿其他信息
-                goods_price = value_set_select(index["price"], item, 0, float)
-                goods_coupon_money = value_set_select(index["coupon_money"], item, "", str)
-                # 写进数据库
+        with tqdm(total=len(data), unit=" items") as progressbar:
+            for item in data:
                 try:
-                    category.goods_set.create(
-                        id=int(item[index["id"]]),
-                        name=str(item[index["name"]]),
-                        picture=str(item[index["picture"]]),
-                        url_affiliate=str(item[index["url_affiliate"]]),
-                        price=float(item[index["price"]]),
-                        commission_rate=value_set_select(index["commission_rate"], item, 0, float),
-                        commission=value_set_select(index["commission"], item, 0, float),
-                        shop_name=value_set_select(index["shop_name"], item, "", str),
-                        platform_type=value_set_select(index["platform_type"], item, "其他", str),
-                        coupon_money=value_set_select(index["coupon_money"], item, "", str),
-                        coupon_time_start=value_set_select(index["coupon_time_start"], item,
-                                                           datetime.date.today(),
-                                                           date_parse),
-                        coupon_time_end=value_set_select(index["coupon_time_end"], item,
-                                                         datetime.date.today() + datetime.timedelta(days=30),
-                                                         date_parse),
-                        url_coupon=value_set_select(index["url_coupon"], item, "", str),
-                        url_affiliate_coupon=value_set_select(index["url_affiliate_coupon"], item, "", str),
-                        price_real=calculate_real_price(goods_price, goods_coupon_money),
-                    )
+                    # Category比较少，可以进行一个缓存，避免太频繁读取数据库
+                    item_category = value_set_select(index["category"], item, None, str)
+                    if item_category is None:
+                        continue
+                    if item_category in category_cache:
+                        category = category_cache[item_category]
+                    else:
+                        category = Category(category_name=item_category)
+                        category.save()
+                        category_cache[item_category] = category
+                    # 继续拿其他信息
+                    goods_price = value_set_select(index["price"], item, 0, float)
+                    goods_coupon_money = value_set_select(index["coupon_money"], item, "", str)
+                    # 写进数据库
+                    try:
+                        category.goods_set.create(
+                            id=int(item[index["id"]]),
+                            name=str(item[index["name"]]),
+                            picture=str(item[index["picture"]]),
+                            url_affiliate=str(item[index["url_affiliate"]]),
+                            price=float(item[index["price"]]),
+                            commission_rate=value_set_select(index["commission_rate"], item, 0, float),
+                            commission=value_set_select(index["commission"], item, 0, float),
+                            shop_name=value_set_select(index["shop_name"], item, "", str),
+                            platform_type=value_set_select(index["platform_type"], item, "其他", str),
+                            coupon_money=value_set_select(index["coupon_money"], item, "", str),
+                            coupon_time_start=value_set_select(index["coupon_time_start"], item,
+                                                               datetime.date.today(),
+                                                               date_parse),
+                            coupon_time_end=value_set_select(index["coupon_time_end"], item,
+                                                             datetime.date.today() + datetime.timedelta(days=30),
+                                                             date_parse),
+                            url_coupon=value_set_select(index["url_coupon"], item, "", str),
+                            url_affiliate_coupon=value_set_select(index["url_affiliate_coupon"], item, "", str),
+                            price_real=calculate_real_price(goods_price, goods_coupon_money),
+                        )
+                    except Exception as e:
+                        # print(e)
+                        pass
                 except Exception as e:
-                    print(e)
-            except Exception as e:
-                print(e)
+                    # print(e)
+                    pass
+                progressbar.update(1)
         counter_category = Category.objects.count()
         counter_goods = Goods.objects.count()
         return counter_category, counter_goods
