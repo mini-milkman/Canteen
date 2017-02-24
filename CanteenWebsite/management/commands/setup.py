@@ -14,6 +14,8 @@ class Command(BaseCommand):
         setting_set("site_slogan", "发现好物")
         # 首页显示什么 random/none
         setting_set("index_page", "random")
+        # 每页显示多少商品
+        setting_set_json("goods_per_page", 50)
         # 文件结构
         setting_set_json("column_index", [0, 1, 2, 4, 5, 6, 8, 9, 12, 13, 17, 18, 19, 20, 21])
         # 导入前清空
