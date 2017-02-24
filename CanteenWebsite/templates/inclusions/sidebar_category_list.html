@@ -1,0 +1,15 @@
+<li {% if not current_category %} class="active" {% endif %}>
+    <a href="{% url 'CanteenWebsite:index' %}" class="collapsible-header" data-turbolinks="false">
+        首页
+    </a>
+</li>
+
+{% for category in categories %}
+    <li {% if forloop.last %}class="last"{% endif %}
+            {% if current_category %}{% ifequal category_name current_category.category_name %}
+            {% endifequal %}{% endif %}>
+        <a href="{% url 'CanteenWebsite:category' category.id %}" class="collapsible-header" data-turbolinks="false">
+            {{ category.category_name }}
+        </a>
+    </li>
+{% endfor %}
