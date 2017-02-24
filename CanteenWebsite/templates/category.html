@@ -17,7 +17,12 @@
                             <img src="{{ goods.picture }}">
                         </div>
                         <div class="card-content">
-                            <span class=" chip">券后 <b class="red-text">{{ goods.price_real }}</b> 元 | {{ goods.platform_type }}</span>
+                            <span class=" chip">
+                                券后
+                                <b class="red-text">
+                                    {{ goods.price_real|floatformat }}
+                                </b> 元 | {{ goods.platform_type }}
+                            </span>
                             <span>{{ goods.name }}</span>
                             <!-- {{ goods.coupon_money }} -->
                         </div>
