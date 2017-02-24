@@ -55,8 +55,9 @@ class DataImporter:
         """
         category_cache = dict()
         # 导入
-        with tqdm(total=len(data), unit=" items") as progressbar:
+        with tqdm(total=len(data), unit="items") as progressbar:
             for item in data:
+                progressbar.update(1)
                 try:
                     # Category比较少，可以进行一个缓存，避免太频繁读取数据库
                     item_category = value_set_select(index["category"], item, None, str)
@@ -65,8 +66,11 @@ class DataImporter:
                     if item_category in category_cache:
                         category = category_cache[item_category]
                     else:
-                        category = Category(category_name=item_category)
-                        category.save()
+                        try:
+                            category = Category.objects.get(category_name=item_category)
+                        except:
+                            category = Category(category_name=item_category)
+                            category.save()
                         category_cache[item_category] = category
                     # 继续拿其他信息
                     goods_price = value_set_select(index["price"], item, 0, float)
@@ -100,7 +104,6 @@ class DataImporter:
                 except Exception as e:
                     # print(e)
                     pass
-                progressbar.update(1)
         counter_category = Category.objects.count()
         counter_goods = Goods.objects.count()
         return counter_category, counter_goods
