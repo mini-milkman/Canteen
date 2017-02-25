@@ -10,6 +10,10 @@ class Setting(models.Model):
         max_length=100,
         unique=True
     )
+    is_json = models.BooleanField(
+        verbose_name="是否是Json类型",
+        default=False
+    )
     value = models.TextField(
         verbose_name="值",
         blank=True

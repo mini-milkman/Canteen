@@ -1,0 +1,38 @@
+{% for goods in goods_list %}
+    <div class="col s6 m6 l4">
+        <div class="card medium hoverable">
+            <div class="card-image">
+                <img src="{{ goods.picture }}">
+            </div>
+            <div class="card-content">
+                            <span class=" chip">
+                                券后
+                                <b class="red-text">
+                                    {{ goods.price_real|floatformat }}
+                                </b> 元 | {{ goods.platform_type }}
+                            </span>
+                <span>{{ goods.name }}</span>
+                <!-- {{ goods.coupon_money }} -->
+            </div>
+            <div class="card-tabs ">
+                <ul class="tabs tabs-fixed-width">
+                    <li class="tab">
+                        <a class="hide-on-med-and-down" href="{{ goods.url_coupon }}"
+                           target="_blank"> 去领券 </a>
+                    </li>
+                    <li class="tab">
+                        <a class="hide-on-med-and-down" href="{{ goods.url_affiliate }}"
+                           target="_blank"> 去购买 </a>
+                    </li>
+                    <li class="tab hide-on-large-only ">
+                        <a class="center-align"
+                           href="{{ goods.url_affiliate_coupon }}"
+                           target="_blank"> 领券并购买 </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    此分类内没有商品
+{% endfor %}

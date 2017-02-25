@@ -10,7 +10,7 @@ def get_setting(name, default=None):
     return setting_get(name, default)
 
 
-@register.inclusion_tag('inclusions/sidebar_category_list.html', takes_context=True)
+@register.inclusion_tag('CanteenWebsite/inclusions/sidebar_category_list.html', takes_context=True)
 def sidebar_category_list(context):
     categories = Category.objects.all()
     try:
@@ -23,7 +23,7 @@ def sidebar_category_list(context):
     }
 
 
-@register.inclusion_tag('inclusions/show_pagination.html')
+@register.inclusion_tag('CanteenWebsite/inclusions/show_pagination.html')
 def show_pagination(page):
     pagination = page.paginator
     page_range = list()

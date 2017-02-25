@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "CanteenWebsite/base.html" %}
 {% load i18n static canteen_website_tags %}
 
 {% block title %}分类： {{ current_category.category_name }} - {{ block.super }}{% endblock %}
@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            {% include "inclusions/show_list_styles/style_1.html" %}
+                            {% include "CanteenWebsite/inclusions/show_list_styles/style_1.html" %}
                         </div>
                     </div>
                 </div>

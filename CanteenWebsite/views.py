@@ -9,7 +9,7 @@ from CanteenWebsite.functions.util import setting_get, setting_get_json
 def index(request):
     context = {}
     return render(request=request,
-                  template_name="index.html",
+                  template_name="CanteenWebsite/index.html",
                   context=context
                   )
 
@@ -23,6 +23,11 @@ def category(request, category_id):
 
     # 每页显示多少商品
     goods_per_page = max(int(setting_get_json("goods_per_page")), 1)
+
+    # 如何排序
+    sort_strategy = setting_get_json("goods_sort_strategy")
+    if sort_strategy:
+        goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
 
     # 分页
     paginator = Paginator(goods_list_all, goods_per_page)
@@ -41,6 +46,6 @@ def category(request, category_id):
         "goods_list": goods_list
     }
     return render(request=request,
-                  template_name="category.html",
+                  template_name="CanteenWebsite/category.html",
                   context=context
                   )

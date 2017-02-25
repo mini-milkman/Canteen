@@ -14,6 +14,9 @@ class Command(BaseCommand):
         parser.add_argument('--delete', action='store_true', help="清空现有数据库")
 
     def handle(self, *args, **options):
+        if options["delete"]:
+            Goods.objects.all().delete()
+
         importer = XlsDataImporter()
         for filename in options['filename']:
             try:
