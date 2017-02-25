@@ -1,0 +1,25 @@
+<ul class="pagination center">
+    {% if page.has_previous %}
+        <li class="waves-effect">
+            <a href="?page={{ page.previous_page_number }}">
+                <i class="material-icons">chevron_left</i>
+            </a>
+        </li>
+    {% endif %}
+
+    {% for page_num in pages %}
+        <li class="{% ifequal page_num page.number %}active{% else %}waves-effect{% endifequal %}waves-effect">
+            <a href="?page={{ page_num }}">
+                {{ page_num }}
+            </a>
+        </li>
+    {% endfor %}
+
+    {% if page.has_next %}
+        <li class="waves-effect">
+            <a href="?page={{ page.next_page_number }}">
+                <i class="material-icons">chevron_right</i>
+            </a>
+        </li>
+    {% endif %}
+</ul>
