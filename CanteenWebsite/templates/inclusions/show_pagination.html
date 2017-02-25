@@ -8,8 +8,8 @@
     {% endif %}
 
     {% for page_num in pages %}
-        <li class="{% ifequal page_num page.number %}active{% else %}waves-effect{% endifequal %}waves-effect">
-            <a href="?page={{ page_num }}">
+        <li class="{% ifequal page_num page.number %}active{% else %}waves-effect{% endifequal %}">
+            <a href="{% ifequal page_num page.number %}#{% else %}?page={{ page_num }}{% endifequal %}">
                 {{ page_num }}
             </a>
         </li>
