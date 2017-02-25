@@ -9,34 +9,66 @@
 
 {% block content %}
     <div class="row">
-        {% for goods in goods_list %}
-            <div class="col s6 m6 l4">
-                <div class="card medium hoverable">
-                    <div class="card-image">
-                        <img src="{{ goods.picture }}">
-                    </div>
+        {% block result_list %}
+            <div class="col s12">
+                <div class="card">
                     <div class="card-content">
+                        <div class="row">
+                            {% for goods in goods_list %}
+                                <div class="col s6 m6 l4">
+                                    <div class="card medium hoverable">
+                                        <div class="card-image">
+                                            <img src="{{ goods.picture }}">
+                                        </div>
+                                        <div class="card-content">
                             <span class=" chip">
                                 券后
                                 <b class="red-text">
                                     {{ goods.price_real|floatformat }}
                                 </b> 元 | {{ goods.platform_type }}
                             </span>
-                        <span>{{ goods.name }}</span>
-                        <!-- {{ goods.coupon_money }} -->
-                    </div>
-                    <div class="card-action ">
-                        <a class="btn hide-on-med-and-down left" href="{{ goods.url_coupon }}"
-                           target="_blank"> <i class="material-icons left"></i> 去领券 </a>
-                        <a class="btn hide-on-med-and-down right" href="{{ goods.url_affiliate }}"
-                           target="_blank"> <i class="material-icons left"></i> 去购买 </a>
-                        <a class="btn hide-on-large-only center-align" href="{{ goods.url_affiliate_coupon }}"
-                           target="_blank">领券并购买</a>
+                                            <span>{{ goods.name }}</span>
+                                            <!-- {{ goods.coupon_money }} -->
+                                        </div>
+                                        <div class="card-action ">
+                                            <a class="btn hide-on-med-and-down left" href="{{ goods.url_coupon }}"
+                                               target="_blank"> <i class="material-icons left"></i> 去领券 </a>
+                                            <a class="btn hide-on-med-and-down right" href="{{ goods.url_affiliate }}"
+                                               target="_blank"> <i class="material-icons left"></i> 去购买 </a>
+                                            <a class="btn hide-on-large-only center-align"
+                                               href="{{ goods.url_affiliate_coupon }}"
+                                               target="_blank">领券并购买</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                此分类内没有商品
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
-        {% empty %}
-            此分类内没有商品
-        {% endfor %}
+        {% endblock result_list %}
+        {% block pagination %}
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <ul class="pagination center">
+                                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                                <li class="active"><a href="#!">1</a></li>
+                                <li class="waves-effect"><a href="#!">2</a></li>
+                                <li class="waves-effect"><a href="#!">3</a></li>
+                                <li class="waves-effect"><a href="#!">4</a></li>
+                                <li class="waves-effect"><a href="#!">5</a></li>
+                                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
     </div>
+
 {% endblock %}
