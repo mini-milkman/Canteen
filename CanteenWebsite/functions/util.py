@@ -121,7 +121,7 @@ def get_goods_list(category, request=None):
         goods_per_page = max(int(setting_get_json("goods_per_page")), 1)
 
         # 如何排序
-        sort_strategy = setting_get_json("goods_sort_strategy")
+        sort_strategy = setting_get("goods_sort_strategy")
         if sort_strategy != "None":
             goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
 
