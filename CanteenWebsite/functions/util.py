@@ -75,8 +75,7 @@ def setting_set(name, value=""):
                                          'value': value
                                      }
                                      )
-
-    return True
+    return value
 
 
 def setting_get_json(name, default=None):
@@ -97,40 +96,47 @@ def setting_set_json(name, value=None):
     try:
         json_string = json.dumps(value)
     except:
-        json_string = json.dumps(None)
+        value = None
+        json_string = json.dumps(value)
 
     Setting.objects.update_or_create(name=name,
                                      defaults={'is_json': True, 'value': json_string}
                                      )
+    return value
 
-    return True
 
-
-def get_goods_list(category, request):
+def get_goods_list(category, request=None):
+    """
+    获取分类中的商品
+    如果是请求过来的，那么进行分页
+    """
     # 分类中的商品
     if category:
         goods_list_all = category.goods_set.all()
     else:
         goods_list_all = Goods.objects.all()
 
-    # 每页显示多少商品
-    goods_per_page = max(int(setting_get_json("goods_per_page")), 1)
+    if request:
+        # 每页显示多少商品
+        goods_per_page = max(int(setting_get_json("goods_per_page")), 1)
 
-    # 如何排序
-    sort_strategy = setting_get_json("goods_sort_strategy")
-    if sort_strategy != "None":
-        goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
+        # 如何排序
+        sort_strategy = setting_get_json("goods_sort_strategy")
+        if sort_strategy != "None":
+            goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
 
-    # 分页
-    paginator = Paginator(goods_list_all, goods_per_page)
-    page = request.GET.get('page')
-    try:
-        goods_list = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        goods_list = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        goods_list = paginator.page(paginator.num_pages)
+        # 分页
+        paginator = Paginator(goods_list_all, goods_per_page)
+        page = request.GET.get('page')
+        try:
+            goods_list = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            goods_list = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            goods_list = paginator.page(paginator.num_pages)
+    else:
+        goods_list = goods_list_all
 
     return goods_list
