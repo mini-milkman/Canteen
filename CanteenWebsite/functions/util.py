@@ -16,6 +16,9 @@ DISCOUNT_TYPE = [
 
 
 def parse_discount(coupon_str):
+    """
+    计算优惠券信息
+    """
     condition = 0
     discount = 0
     for discounter in DISCOUNT_TYPE:
@@ -31,6 +34,9 @@ def parse_discount(coupon_str):
 
 
 def calculate_real_price(price, coupon_str):
+    """
+    计算商品真实价格
+    """
     condition, discount = parse_discount(coupon_str)
     if price >= condition:
         price -= discount
