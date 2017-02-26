@@ -1,6 +1,7 @@
 import re
 import json
-from CanteenWebsite.models import Setting
+from CanteenWebsite.models import Setting, Goods
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 DISCOUNT_TYPE = [
     {
@@ -103,3 +104,33 @@ def setting_set_json(name, value=None):
                                      )
 
     return True
+
+
+def get_goods_list(category, request):
+    # 分类中的商品
+    if category:
+        goods_list_all = category.goods_set.all()
+    else:
+        goods_list_all = Goods.objects.all()
+
+    # 每页显示多少商品
+    goods_per_page = max(int(setting_get_json("goods_per_page")), 1)
+
+    # 如何排序
+    sort_strategy = setting_get_json("goods_sort_strategy")
+    if sort_strategy != "None":
+        goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
+
+    # 分页
+    paginator = Paginator(goods_list_all, goods_per_page)
+    page = request.GET.get('page')
+    try:
+        goods_list = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        goods_list = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        goods_list = paginator.page(paginator.num_pages)
+
+    return goods_list

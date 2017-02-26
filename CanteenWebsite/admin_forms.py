@@ -31,7 +31,7 @@ class OptionsForm(forms.Form):
     goods_sort_strategy = forms.ChoiceField(
         label="商品排序方式",
         choices=(
-            ('random', '随机/不排序'),
+            ('None', '随机/不排序'),
             ('id', '商品ID'),
             ('commission', '佣金 从低到高'),
             ('-commission', '佣金 从高到低'),
