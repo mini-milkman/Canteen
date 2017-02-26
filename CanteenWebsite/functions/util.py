@@ -2,6 +2,7 @@ import re
 import json
 from CanteenWebsite.models import Setting, Goods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import datetime
 
 DISCOUNT_TYPE = [
     {
@@ -140,3 +141,10 @@ def get_goods_list(category, request=None):
         goods_list = goods_list_all
 
     return goods_list
+
+
+def delete_outdated_goods():
+    deleted, _ = Goods.objects.filter(
+        coupon_time_end__lt=datetime.date.today()
+    ).delete()
+    return deleted

@@ -2,7 +2,7 @@ import os
 from tqdm import tqdm
 import pandas as pd
 from CanteenWebsite.models import Category, Goods
-from CanteenWebsite.functions.util import calculate_real_price, value_set_select
+from CanteenWebsite.functions.util import calculate_real_price, value_set_select, delete_outdated_goods
 from dateutil.parser import parse as date_parse
 import datetime
 
@@ -101,6 +101,9 @@ class DataImporter:
                 except Exception as e:
                     # print(e)
                     pass
+        # 清理过期商品
+        delete_outdated_goods()
+
         counter_category = Category.objects.count()
         counter_goods = Goods.objects.count()
         return counter_category, counter_goods
