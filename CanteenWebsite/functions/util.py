@@ -2,24 +2,23 @@ import re
 import json
 from CanteenWebsite.models import Setting
 
-DISCOUNT_TYPE = {
-    "conditinal": {
+DISCOUNT_TYPE = [
+    {
         "reg": re.compile(r"满([\d.]+)元减([\d.]+)元"),
         "condition": 0,
         "discount": 1,
-    },
-    "unconditinal": {
+    }, {
         "reg": re.compile(r"([\d.]+)元无条件券"),
         "condition": None,
         "discount": 0,
     }
-}
+]
 
 
 def parse_discount(coupon_str):
     condition = 0
     discount = 0
-    for _, discounter in DISCOUNT_TYPE.items():
+    for discounter in DISCOUNT_TYPE:
         result = discounter["reg"].match(coupon_str)
         if result:
             groups = result.groups()
@@ -63,12 +62,12 @@ def setting_set(name, value=""):
     """
     写入设置
     """
-    try:
-        result = Setting.objects.get(name=name)
-        result.value = value
-        result.save()
-    except:
-        Setting.objects.create(name=name, is_json=False, value=value)
+    Setting.objects.update_or_create(name=name,
+                                     defaults={
+                                         'is_json': False,
+                                         'value': value
+                                     }
+                                     )
 
     return True
 
@@ -93,11 +92,8 @@ def setting_set_json(name, value=None):
     except:
         json_string = json.dumps(None)
 
-    try:
-        result = Setting.objects.get(name=name)
-        result.value = value
-        result.save()
-    except:
-        Setting.objects.create(name=name, is_json=True, value=json_string)
+    Setting.objects.update_or_create(name=name,
+                                     defaults={'is_json': True, 'value': json_string}
+                                     )
 
     return True

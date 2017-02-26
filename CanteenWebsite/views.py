@@ -26,7 +26,7 @@ def category(request, category_id):
 
     # 如何排序
     sort_strategy = setting_get_json("goods_sort_strategy")
-    if sort_strategy:
+    if sort_strategy != "None":
         goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
 
     # 分页
