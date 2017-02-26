@@ -16,3 +16,7 @@
 1. manage.py migrate
 1. manage.py setup
 1. manage.py createsuperuser
+
+## 使用
+1. 导入商品： `manage.py data_import 商品XLS文件.xls`
+1. 清理过期商品： `manage.py delete_outdate_goods`
