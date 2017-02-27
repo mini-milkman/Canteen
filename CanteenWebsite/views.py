@@ -1,9 +1,9 @@
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from CanteenWebsite.functions.util import setting_get
-from CanteenWebsite.models import Category, Goods
+from django.shortcuts import render
 
 from CanteenWebsite.functions.util import get_goods_list
+from CanteenWebsite.functions.util import setting_get
+from CanteenWebsite.models import Category, Goods
 
 
 def index(request):
@@ -37,5 +37,18 @@ def category(request, category_id):
     }
     return render(request=request,
                   template_name="CanteenWebsite/category.html",
+                  context=context
+                  )
+
+
+def search(request, key_word):
+    goods_list_all = Goods.objects.filter(name__contains=key_word)
+    goods_list = get_goods_list(goods_list_all, request)
+    context = {
+        "keyword": key_word,
+        "goods_list": goods_list
+    }
+    return render(request=request,
+                  template_name="CanteenWebsite/search.html",
                   context=context
                   )

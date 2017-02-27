@@ -1,0 +1,36 @@
+{% extends "CanteenWebsite/base.html" %}
+{% load i18n static canteen_website_tags %}
+
+{% block title %}搜索： {{ keyword }} - {{ block.super }}{% endblock %}
+
+{% block page_title %}
+    搜索结果： {{ keyword }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% block result_list %}
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            {% include "CanteenWebsite/inclusions/show_list_styles/style_1.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock result_list %}
+        {% block pagination %}
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            {% show_pagination goods_list %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+
+{% endblock %}
