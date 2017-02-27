@@ -1,5 +1,5 @@
 {% extends "CanteenWebsite/base.html" %}
-{% load i18n static %}
+{% load i18n static canteen_website_tags %}
 
 {% block title %}首页 - {{ block.super }}{% endblock %}
 
@@ -8,5 +8,32 @@
 {% endblock %}
 
 {% block content %}
-    Hello World!
+    <div class="row">
+        {% ifequal index_page "blank" %}
+            {% include "CanteenWebsite/inclusions/index_blank.html" %}
+        {% else %}
+            {% block result_list %}
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row">
+                                {% include "CanteenWebsite/inclusions/show_list_styles/style_1.html" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock result_list %}
+            {% block pagination %}
+                <div class="col s12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row">
+                                {% show_pagination goods_list %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endifequal %}
+    </div>
 {% endblock %}

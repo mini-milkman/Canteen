@@ -23,7 +23,7 @@ def sidebar_category_list(context):
     }
 
 
-@register.inclusion_tag('CanteenWebsite/inclusions/show_pagination.html')
+@register.inclusion_tag('CanteenWebsite/inclusions/pagination.html')
 def show_pagination(page):
     pagination = page.paginator
     page_range = list()
