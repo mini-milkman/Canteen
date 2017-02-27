@@ -93,3 +93,4 @@ ENV/
 
 # Django
 migrations/
+/static/
