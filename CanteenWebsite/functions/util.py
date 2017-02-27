@@ -106,16 +106,10 @@ def setting_set_json(name, value=None):
     return value
 
 
-def get_goods_list(category, request=None):
+def get_goods_list(goods_list_all, request=None):
     """
-    获取分类中的商品
-    如果是请求过来的，那么进行分页
+    对列表进行分页
     """
-    # 分类中的商品
-    if category:
-        goods_list_all = category.goods_set.all()
-    else:
-        goods_list_all = Goods.objects.all()
 
     if request:
         # 每页显示多少商品
@@ -125,25 +119,28 @@ def get_goods_list(category, request=None):
         sort_strategy = setting_get("goods_sort_strategy")
         if sort_strategy != "None":
             goods_list_all = goods_list_all.extra(order_by=[sort_strategy])
-
-        # 分页
-        paginator = Paginator(goods_list_all, goods_per_page)
-        page = request.GET.get('page')
-        try:
-            goods_list = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            goods_list = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            goods_list = paginator.page(paginator.num_pages)
     else:
-        goods_list = goods_list_all
+        goods_per_page = 2147463847
+
+    # 分页
+    paginator = Paginator(goods_list_all, goods_per_page)
+    page = request.GET.get('page')
+    try:
+        goods_list = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        goods_list = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        goods_list = paginator.page(paginator.num_pages)
 
     return goods_list
 
 
 def delete_outdated_goods():
+    """
+    删除不在优惠期内的商品
+    """
     deleted, _ = Goods.objects.filter(
         coupon_time_end__lt=datetime.date.today()
     ).delete()
