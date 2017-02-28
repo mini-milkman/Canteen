@@ -4,10 +4,10 @@ from CanteenWebsite.functions.util import setting_set, setting_set_json
 
 
 class Command(BaseCommand):
-    help = "基本设置"
+    help = "导入网站初始设置"
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS("导入默认设置"))
+        self.stdout.write(self.style.SUCCESS("导入网站初始设置"))
 
         # 站点名称
         setting_set("site_name", "Canteen")
