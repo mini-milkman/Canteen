@@ -1,4 +1,4 @@
-apt install -y python3 python3-pip python3-django python3-pandas python3-mysqldb
+apt install -y libapache2-mod-wsgi-py3 python3 python3-pip python3-django python3-pandas python3-mysqldb
 for req in $(cat requirements.txt); do 
     pip3 install -U $req; 
 done
