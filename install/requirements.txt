@@ -1,0 +1,6 @@
+django
+django-material
+pandas
+tqdm
+xlrd
+

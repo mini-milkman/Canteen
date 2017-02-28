@@ -1,22 +1,25 @@
 # Canteen
 
-一个懒人版淘宝客系统
+一个__懒人版__淘宝客系统
 
 ## 系统依赖
 
 1. Python 3
-1. django
-1. django-material
-1. pandas
-1. tqdm
+1. Python3-pip
 
 ## 安装
 
-1. manage.py makemigrations
-1. manage.py migrate
-1. manage.py setup
-1. manage.py createsuperuser
+```bash
+cd install
+./install.sh
+```
 
 ## 使用
+
 1. 导入商品： `manage.py data_import 商品XLS文件.xls`
 1. 清理过期商品： `manage.py delete_outdate_goods`
+
+## 其他说明
+
+1. 建议使用 cron job 来自动清理过期商品： `10 0 * * * cd /var/www/Canteen; python3 manage.py delete_outdate_goods`
+
