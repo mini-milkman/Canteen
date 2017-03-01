@@ -1,19 +1,13 @@
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from CanteenWebsite.utils.functions import setting_get, setting_set
-from CanteenWebsite.utils.functions import setting_get_json, setting_set_json
-from django.contrib.admin.views.decorators import staff_member_required
-from .admin_forms import OptionsForm, DataImportOptionForm, DataImportForm
 from django.contrib import admin
-from django.contrib.admin import AdminSite
 from django.http import HttpResponse
-from .models import Category
-from .models import Goods
-from .models import Setting
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+from .admin_forms import OptionsForm, DataImportOptionForm, DataImportForm
 
 
-class CanteenAdminSite(AdminSite):
-    site_header = 'Monty Python administration'
+class CanteenAdminSite(admin.AdminSite):
+    site_header = '站点设置'
 
     def get_urls(self):
         from django.conf.urls import url
@@ -32,9 +26,9 @@ class CanteenAdminSite(AdminSite):
                 return HttpResponse("General Options")
         else:
             form = OptionsForm()
-        return render_to_response('admin/change_form.html',
-                                  {'form': form},
-                                  request)
+        return render_to_response('admin/base.html',
+                                  {'adminform': form},
+                                  RequestContext(request, {}))
 
     def data_import_options(self, request):
         if request.method == 'POST':
@@ -44,20 +38,19 @@ class CanteenAdminSite(AdminSite):
         else:
             form = DataImportOptionForm()
         return render_to_response('admin/change_form.html',
-                                  {'form': form},
-                                  request)
+                                  {'adminform': form},
+                                  RequestContext(request, {}))
 
     def data_import(self, request):
         if request.method == 'POST':
-            form = DataImportOptionForm(request.POST)
+            form = DataImportForm(request.POST)
             if form.is_valid():
                 return HttpResponse("Data Import")
         else:
-            form = DataImportOptionForm()
+            form = DataImportForm()
         return render_to_response('admin/change_form.html',
-                                  {'form': form},
-                                  request
-                                  )
+                                  {'adminform': form},
+                                  RequestContext(request, {}))
 
 
 canteen_admin_site = CanteenAdminSite()

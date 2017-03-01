@@ -9,7 +9,8 @@ from django.urls import reverse
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['category_name', 'goods_counter']
+    list_display = ['id', 'category_name', 'goods_counter']
+    list_display_links = ['id', 'category_name']
 
     def goods_counter(self, obj):
         return obj.goods_set.count()
@@ -19,7 +20,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Goods)
 class GoodsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'price_real', 'commission', 'platform_type']
+    list_display = ['id', 'name', 'category', 'price_real', 'commission', 'platform_type']
+    list_display_links = ['id', 'name']
     list_filter = ['category', 'platform_type']
 
 
