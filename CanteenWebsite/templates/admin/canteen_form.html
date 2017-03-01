@@ -6,8 +6,7 @@
 {% block content %}
     <div class="row change-form">
         <div class="col s12 m12 l9">
-            <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
-                  id="{{ opts.model_name }}_form">
+            <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post">
                 <div class="card">
                     <div class="card-content">
                         {% csrf_token %}
@@ -29,9 +28,8 @@
                                 </div>
                             </div>
                         {% endif %}
-
                         {% block change_form %}
-                            {{ form }}
+                            {% form form=form %}{% endform %}
                             {% prepopulated_fields_js %}
                         {% endblock %}
                         {% block after_related_objects %}{% endblock %}
