@@ -4,21 +4,18 @@ from .models import Goods
 from .models import Setting
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['category_name']
 
 
-admin.site.register(Category, CategoryAdmin)
-
-
+@admin.register(Goods)
 class GoodsAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'price_real', 'commission', 'platform_type']
     list_filter = ['category', 'platform_type']
 
 
-admin.site.register(Goods, GoodsAdmin)
-
-
+@admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     list_display = ['name', 'value_show']
 
@@ -28,5 +25,4 @@ class SettingAdmin(admin.ModelAdmin):
         else:
             return obj.value
 
-
-admin.site.register(Setting, SettingAdmin)
+    value_show.__name__ = "值"
