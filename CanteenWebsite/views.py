@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 
-from CanteenWebsite.functions.util import get_goods_list
-from CanteenWebsite.functions.util import setting_get
+from CanteenWebsite.utils.functions import get_goods_list
+from CanteenWebsite.utils.functions import setting_get
 from CanteenWebsite.models import Category, Goods
 
 

@@ -2,7 +2,7 @@ import os
 from tqdm import tqdm
 import pandas as pd
 from CanteenWebsite.models import Category, Goods
-from CanteenWebsite.functions.util import calculate_real_price, value_set_select, delete_outdated_goods
+from CanteenWebsite.utils.functions import calculate_real_price, value_set_select, delete_outdated_goods
 from dateutil.parser import parse as date_parse
 import datetime
 

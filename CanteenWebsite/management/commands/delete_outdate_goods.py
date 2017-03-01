@@ -1,6 +1,6 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
-from CanteenWebsite.functions.util import delete_outdated_goods
+from CanteenWebsite.utils.functions import delete_outdated_goods
 from CanteenWebsite.models import Goods, Category
 
 

@@ -1,6 +1,6 @@
 from django import template
 from CanteenWebsite.models import Category
-from CanteenWebsite.functions.util import setting_get
+from CanteenWebsite.utils.functions import setting_get
 
 register = template.Library()
 

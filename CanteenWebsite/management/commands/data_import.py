@@ -1,8 +1,8 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from CanteenWebsite.models import Category, Goods
-from CanteenWebsite.functions.data_import import XlsDataImporter
-from CanteenWebsite.functions.util import setting_get_json
+from CanteenWebsite.utils.data_importer import XlsDataImporter
+from CanteenWebsite.utils.functions import setting_get_json
 
 
 class Command(BaseCommand):

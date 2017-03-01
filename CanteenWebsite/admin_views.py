@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from CanteenWebsite.functions.util import setting_get, setting_set
-from CanteenWebsite.functions.util import setting_get_json, setting_set_json
+from CanteenWebsite.utils.functions import setting_get, setting_set
+from CanteenWebsite.utils.functions import setting_get_json, setting_set_json
 from django.contrib.admin.views.decorators import staff_member_required
 from .admin_forms import OptionsForm, DataImportForm
 

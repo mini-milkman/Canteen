@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from CanteenWebsite.functions.util import setting_set, setting_set_json
+from CanteenWebsite.utils.functions import setting_set, setting_set_json
 
 
 class Command(BaseCommand):

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin import AdminSite
+from django.http import HttpResponse
 from .models import Category
 from .models import Goods
 from .models import Setting
@@ -26,3 +28,29 @@ class SettingAdmin(admin.ModelAdmin):
             return obj.value
 
     value_show.__name__ = "值"
+
+
+class CanteenAdminSite(AdminSite):
+    site_header = 'Monty Python administration'
+
+    def get_urls(self):
+        from django.conf.urls import url
+        urls = super(CanteenAdminSite, self).get_urls()
+        urls += [
+            url(r'^general_options/$', self.admin_view(self.general_options)),
+            url(r'^data_import_options/$', self.admin_view(self.data_import_options)),
+            url(r'^data_import/$', self.admin_view(self.data_import))
+        ]
+        return urls
+
+    def general_options(self, request):
+        return HttpResponse("General Options")
+
+    def data_import_options(self, request):
+        return HttpResponse("Data Import Options")
+
+    def data_import(self, request):
+        return HttpResponse("Data Import")
+
+
+canteen_admin_site = CanteenAdminSite()
