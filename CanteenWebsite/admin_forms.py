@@ -45,7 +45,7 @@ class OptionsForm(forms.Form):
     )
 
 
-class DataImportForm(forms.Form):
+class DataImportOptionForm(forms.Form):
     file = forms.FileField(
         label="选择文件"
     )
@@ -84,4 +84,10 @@ class DataImportForm(forms.Form):
     whitelist_goods = forms.CharField(
         label="商品白名单",
         max_length=100
+    )
+
+
+class DataImportForm(forms.Form):
+    file = forms.FileField(
+        label="选择文件"
     )

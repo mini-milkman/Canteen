@@ -15,11 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-import CanteenWebsite.admin_views
 
 urlpatterns = [
     url(r'^', include('CanteenWebsite.urls', namespace='CanteenWebsite')),
-    # url(r'^admin/general_options/$', CanteenWebsite.admin_views.general_options),
-    # url(r'^admin/data_import_options/$', CanteenWebsite.admin_views.data_import_options),
     url(r'^admin/', admin.site.urls),
 ]

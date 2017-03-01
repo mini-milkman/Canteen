@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from . import views
-from CanteenWebsite.admin import canteen_admin_site
+from CanteenWebsite.admin_views import canteen_admin_site
 
 urlpatterns = [
     url(r"^admin/", canteen_admin_site.urls),
