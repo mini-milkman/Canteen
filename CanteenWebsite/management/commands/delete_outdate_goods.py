@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from django.core.management.base import BaseCommand, CommandError
 from CanteenWebsite.utils.functions import delete_outdated_goods

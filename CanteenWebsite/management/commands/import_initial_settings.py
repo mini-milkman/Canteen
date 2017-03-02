@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 
 from CanteenWebsite.utils.functions import setting_set, setting_set_json

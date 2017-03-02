@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 from CanteenWebsite.models import Category
 from CanteenWebsite.utils.functions import setting_get

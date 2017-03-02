@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from django.core.management.base import BaseCommand, CommandError
 from CanteenWebsite.models import Category, Goods
