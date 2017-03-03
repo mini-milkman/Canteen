@@ -2,7 +2,9 @@
 from django import forms
 
 from CanteenWebsite.utils.functions import setting_get
+from CanteenWebsite.utils.functions import setting_get_json
 from CanteenWebsite.utils.functions import setting_set
+from CanteenWebsite.utils.functions import setting_set_json
 
 
 class OptionsForm(forms.Form):
@@ -14,7 +16,8 @@ class OptionsForm(forms.Form):
     site_slogan = forms.CharField(
         label="站点副标题",
         initial=setting_get("site_slogan"),
-        max_length=100
+        max_length=100,
+        required=False
     )
     index_page = forms.ChoiceField(
         label="首页显示内容",
@@ -64,45 +67,91 @@ class OptionsForm(forms.Form):
 
 
 class DataImportOptionForm(forms.Form):
-    file = forms.FileField(
-        label="选择文件"
-    )
     column_index = forms.CharField(
         label="文件导入结构",
+        initial=str(setting_get_json("column_index")).strip('[]'),
         max_length=1000
     )
-    delete_before_import = forms.CharField(
+    delete_before_import = forms.BooleanField(
         label="导入前清空",
-        max_length=100
+        initial=setting_get_json("delete_before_import"),
+        required=False
     )
-    use_blacklist_category = forms.BooleanField(
-        label="使用分类黑名单"
+
+    # 分类黑白名单
+    blacklist_category_active = forms.BooleanField(
+        label="使用分类黑名单",
+        initial=setting_get_json("blacklist_category_active"),
+        required=False
     )
     blacklist_category = forms.CharField(
         label="分类黑名单",
-        max_length=100
+        initial=','.join(setting_get_json("blacklist_category")),
+        widget=forms.Textarea,
+        required=False
     )
-    use_whitelist_category = forms.BooleanField(
-        label="使用分类白名单"
+    whitelist_category_active = forms.BooleanField(
+        label="使用分类白名单",
+        initial=setting_get_json("whitelist_category_active"),
+        required=False
     )
     whitelist_category = forms.CharField(
         label="分类白名单",
-        max_length=100
+        initial=','.join(setting_get_json("whitelist_category")),
+        widget=forms.Textarea,
+        required=False
     )
-    use_blacklist_goods = forms.BooleanField(
-        label="使用商品黑名单"
+
+    # 商品黑白名单
+    blacklist_goods_active = forms.BooleanField(
+        label="使用商品黑名单",
+        initial=setting_get_json("blacklist_goods_active"),
+        required=False
     )
     blacklist_goods = forms.CharField(
         label="商品黑名单",
-        max_length=100
+        initial=','.join(setting_get_json("blacklist_goods")),
+        widget=forms.Textarea,
+        required=False
     )
-    use_whitelist_goods = forms.BooleanField(
-        label="使用商品白名单"
+    whitelist_goods_active = forms.BooleanField(
+        label="使用商品白名单",
+        initial=setting_get_json("whitelist_goods_active"),
+        required=False
     )
     whitelist_goods = forms.CharField(
         label="商品白名单",
-        max_length=100
+        initial=','.join(setting_get_json("whitelist_goods")),
+        widget=forms.Textarea,
+        required=False
     )
+
+    def save(self):
+        save_succeed = False
+        if self.is_valid():
+            # 文件结构
+            data = list()
+            for x in self.cleaned_data['column_index'].split(','):
+                try:
+                    data.append(int(x))
+                except:
+                    data.append(0)
+            setting_set_json("column_index", data)
+
+            # 不需要使用特殊包裹的
+            for key in ["delete_before_import",
+                        "blacklist_category_active", "whitelist_category_active",
+                        "blacklist_goods_active", "whitelist_goods_active"]:
+                setting_set_json(key, self.cleaned_data[key])
+
+            # 需要变成列表的
+            for key in ["blacklist_category", "whitelist_category",
+                        "blacklist_goods", "whitelist_goods"]:
+                data = self.cleaned_data[key].strip().split(',')
+                data = [x.strip() for x in data]
+                setting_set_json(key, data)
+            save_succeed = True
+        return save_succeed
 
 
 class DataImportForm(forms.Form):
