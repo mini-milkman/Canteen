@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+import datetime
 import os
-from tqdm import tqdm
+
 import pandas as pd
+from dateutil.parser import parse as date_parse
+from tqdm import tqdm
+
 from CanteenWebsite.models import Category, Goods
 from CanteenWebsite.utils.functions import calculate_real_price, value_set_select, delete_outdated_goods
-from dateutil.parser import parse as date_parse
-import datetime
 
 
 class DataImporter:
