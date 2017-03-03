@@ -51,11 +51,10 @@ class SettingAdmin(admin.ModelAdmin):
     def general_form(self, request, ModelForm, form_url="", extra_context=None, title="设置"):
         if request.method == 'POST':
             form = ModelForm(request.POST)
-            if form.is_valid():
-                form_validated = True
-                form.save()
+            if form.save():
+                pass
             else:
-                form_validated = False
+                pass
         else:
             form = ModelForm()
         context = dict(

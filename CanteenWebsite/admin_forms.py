@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 from django import forms
 
+from CanteenWebsite.utils.functions import setting_get
+from CanteenWebsite.utils.functions import setting_set
+
 
 class OptionsForm(forms.Form):
     site_name = forms.CharField(
         label='站点名称',
+        initial=setting_get("site_name"),
         max_length=100
     )
     site_slogan = forms.CharField(
         label="站点副标题",
+        initial=setting_get("site_slogan"),
         max_length=100
     )
     index_page = forms.ChoiceField(
         label="首页显示内容",
+        initial=setting_get("index_page"),
         choices=(
             ('random', '随机'),
             ('blank', '空白'),
@@ -20,10 +26,12 @@ class OptionsForm(forms.Form):
     )
     goods_per_page = forms.IntegerField(
         label="每页显示商品数量",
+        initial=int(setting_get("goods_per_page")),
         min_value=1
     )
     goods_style = forms.ChoiceField(
         label="商品显示样式",
+        initial=setting_get("goods_list_style"),
         choices=(
             ('style_1', '上图下介绍'),
             ('style_2', '左图右介绍'),
@@ -31,6 +39,7 @@ class OptionsForm(forms.Form):
     )
     goods_sort_strategy = forms.ChoiceField(
         label="商品排序方式",
+        initial=setting_get("goods_sort_strategy"),
         choices=(
             ('None', '随机/不排序'),
             ('id', '商品ID'),
@@ -44,6 +53,14 @@ class OptionsForm(forms.Form):
             ('-price_real', '商品实际购买价格 从高到低'),
         )
     )
+
+    def save(self):
+        save_succeed = False
+        if self.is_valid():
+            for key, value in self.cleaned_data.items():
+                setting_set(key, value)
+            save_succeed = True
+        return save_succeed
 
 
 class DataImportOptionForm(forms.Form):
