@@ -50,7 +50,7 @@ class SettingAdmin(admin.ModelAdmin):
 
     def general_form(self, request, ModelForm, form_url="", extra_context=None, title="设置"):
         if request.method == 'POST':
-            form = ModelForm(request.POST)
+            form = ModelForm(request.POST, request.FILES)
             if form.save():
                 pass
             else:
@@ -59,6 +59,7 @@ class SettingAdmin(admin.ModelAdmin):
             form = ModelForm()
         context = dict(
             self.admin_site.each_context(request),
+            has_file_field=True,
             title=title,
             form=form,
             form_url=form_url

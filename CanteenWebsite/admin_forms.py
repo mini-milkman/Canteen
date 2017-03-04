@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import threading
+
 from django import forms
 
+from CanteenWebsite.utils.data_importers import XlsDataImporter
 from CanteenWebsite.utils.functions import setting_get
 from CanteenWebsite.utils.functions import setting_get_json
 from CanteenWebsite.utils.functions import setting_set
@@ -158,3 +161,18 @@ class DataImportForm(forms.Form):
     file = forms.FileField(
         label="选择文件"
     )
+
+    def save(self):
+        save_succeed = False
+        if self.is_valid():
+            title = setting_get_json("column_index")
+            importer = XlsDataImporter()
+            # 由于数据量很大，这里新开一个线程进行数据导入
+            th = threading.Thread(
+                target=importer.import_data,
+                args=(self.cleaned_data['file'].temporary_file_path(),
+                      title,)
+            )
+            th.start()
+            save_succeed = True
+        return save_succeed
