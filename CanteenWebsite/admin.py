@@ -2,6 +2,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.template.response import TemplateResponse
+from django.urls import reverse
 
 from .admin_forms import OptionsForm, DataImportOptionForm, DataImportForm
 from .models import Category
@@ -70,23 +71,23 @@ class SettingAdmin(admin.ModelAdmin):
                                 context
                                 )
 
-    def general_options(self, request, form_url='', extra_context=None):
+    def general_options(self, request, extra_context=None):
         return self.general_form(request,
                                  OptionsForm,
-                                 form_url=form_url,
+                                 form_url=reverse("admin:general_options"),
                                  extra_context=extra_context,
                                  title="基本设置")
 
-    def data_import_options(self, request, form_url='', extra_context=None):
+    def data_import_options(self, request, extra_context=None):
         return self.general_form(request,
                                  DataImportOptionForm,
-                                 form_url=form_url,
+                                 form_url=reverse("admin:data_import_options"),
                                  extra_context=extra_context,
                                  title="数据导入设置")
 
-    def data_import(self, request, form_url='', extra_context=None):
+    def data_import(self, request, extra_context=None):
         return self.general_form(request,
                                  DataImportForm,
-                                 form_url=form_url,
+                                 form_url=reverse("admin:data_import"),
                                  extra_context=extra_context,
                                  title="数据导入")
