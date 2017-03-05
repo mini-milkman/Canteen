@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_urls admin_static admin_modify material_form material_admin %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block sidenav_items %}
+    <li class="no-padding">
+        <a class="collapsible-header" href="{% url "admin:index" %}">
+            <i class="material-icons">apps</i>管理首页
+        </a>
+    </li>
+    <li>
+        <ul class="collapsible collapsible-accordion">
+            <li>
+                <a class="collapsible-header">
+                    <i class="material-icons">view_quilt</i> 站点设置
+                </a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li class="">
+                            <a href="{% url 'admin:general_options' %}">站点设置</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'admin:data_import_options' %}">导入设置</a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'admin:data_import' %}">数据导入</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </li>
+    {% get_app_list request as app_list %}
+    {% for app in app_list %}
+        <li {% if app.active %}class="active"{% endif %}>
+        <ul class="collapsible collapsible-accordion">
+            <li>
+                <a class="collapsible-header{% if app.active %} active{% endif %}">{{ app.app_icon }} {{ app.name|truncatechars:23 }}</a>
+                <div class="collapsible-body" {% if app.active %}style="display:block"{% endif %}>
+                    <ul>
+                        {% for model in app.models %}
+                            <li class="{% if model.active %}active{% endif %}">
+                                <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+{% endblock sidenav_items %}
