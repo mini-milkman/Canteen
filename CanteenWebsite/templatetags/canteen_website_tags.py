@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
+
 from CanteenWebsite.models import Category
 from CanteenWebsite.utils.functions import setting_get
 
@@ -51,3 +52,8 @@ def show_pagination(page):
         'page': page,
         'pages': page_range
     }
+
+
+@register.assignment_tag
+def define(val=None):
+    return val
