@@ -32,16 +32,8 @@ class OptionsForm(forms.Form):
     )
     goods_per_page = forms.IntegerField(
         label="每页显示商品数量",
-        initial=int(setting_get("goods_per_page")),
+        initial=int(setting_get("goods_per_page", 50)),
         min_value=1
-    )
-    goods_style = forms.ChoiceField(
-        label="商品显示样式",
-        initial=setting_get("goods_list_style"),
-        choices=(
-            ('style_1', '上图下介绍'),
-            ('style_2', '左图右介绍'),
-        )
     )
     goods_sort_strategy = forms.ChoiceField(
         label="商品排序方式",
@@ -57,6 +49,14 @@ class OptionsForm(forms.Form):
             ('-coupon_time_end', '优惠券结束时间 从晚到早'),
             ('price_real', '商品实际购买价格 从低到高'),
             ('-price_real', '商品实际购买价格 从高到低'),
+        )
+    )
+    goods_list_style = forms.ChoiceField(
+        label="商品显示样式",
+        initial=setting_get("goods_list_style"),
+        choices=(
+            ('style_1', '上图下介绍'),
+            ('style_2', '左图右介绍'),
         )
     )
 
@@ -89,7 +89,7 @@ class DataImportOptionForm(forms.Form):
     )
     blacklist_category = forms.CharField(
         label="分类黑名单",
-        initial=','.join(setting_get_json("blacklist_category")),
+        initial=','.join(setting_get_json("blacklist_category", [])),
         widget=forms.Textarea,
         required=False
     )
@@ -100,7 +100,7 @@ class DataImportOptionForm(forms.Form):
     )
     whitelist_category = forms.CharField(
         label="分类白名单",
-        initial=','.join(setting_get_json("whitelist_category")),
+        initial=','.join(setting_get_json("whitelist_category", [])),
         widget=forms.Textarea,
         required=False
     )
@@ -113,7 +113,7 @@ class DataImportOptionForm(forms.Form):
     )
     blacklist_goods = forms.CharField(
         label="商品黑名单",
-        initial=','.join(setting_get_json("blacklist_goods")),
+        initial=','.join(setting_get_json("blacklist_goods", [])),
         widget=forms.Textarea,
         required=False
     )
@@ -124,7 +124,7 @@ class DataImportOptionForm(forms.Form):
     )
     whitelist_goods = forms.CharField(
         label="商品白名单",
-        initial=','.join(setting_get_json("whitelist_goods")),
+        initial=','.join(setting_get_json("whitelist_goods", [])),
         widget=forms.Textarea,
         required=False
     )
