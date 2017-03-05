@@ -4,7 +4,7 @@ from django.db import models
 
 class Setting(models.Model):
     class Meta:
-        verbose_name_plural = "设置"
+        verbose_name_plural = "设置项"
 
     name = models.CharField(
         verbose_name="设置项",

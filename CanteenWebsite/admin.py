@@ -40,6 +40,12 @@ class SettingAdmin(admin.ModelAdmin):
 
     value_show.__name__ = "值"
 
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
     def get_urls(self):
         urls = super(SettingAdmin, self).get_urls()
         my_urls = [
