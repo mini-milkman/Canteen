@@ -6,7 +6,7 @@
             </div>
             <div class="card-stacked">
                 <div class="card-content">
-                    <p><b>{{ goods.name }}</b></p>
+                    <p><b>{{ goods.name | truncatechars:32 }}</b></p>
                     <br/>
                     <span class=" chip">券后
                         <b class="red-text">

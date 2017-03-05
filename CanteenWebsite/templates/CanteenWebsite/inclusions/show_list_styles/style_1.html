@@ -11,7 +11,7 @@
                                     {{ goods.price_real|floatformat }}
                                 </b> 元 | {{ goods.platform_type }}
                             </span>
-                <span>{{ goods.name }}</span>
+                <span>{{ goods.name | truncatechars:32 }}</span>
                 <!-- {{ goods.coupon_money }} -->
             </div>
             <div class="card-tabs ">
