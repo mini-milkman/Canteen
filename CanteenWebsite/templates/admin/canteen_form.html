@@ -3,6 +3,13 @@
 
 {% block brand-logo %}{{ title }}{% endblock %}
 
+{% block breadcrumbs_items %}
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    <a class="active" href="#">
+        {{ title }}
+    </a>
+{% endblock %}
+
 {% block content %}
     <div class="row change-form">
         <div class="col s12 m12 l9">

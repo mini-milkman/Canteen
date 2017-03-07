@@ -58,3 +58,7 @@
         </ul>
     {% endfor %}
 {% endblock sidenav_items %}
+
+{% block page_title %}
+    <a href="#" class="page-title">{% block brand-logo %}{% trans 'Administration' %}{% endblock %}</a>
+{% endblock %}
