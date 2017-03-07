@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib import messages
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
@@ -60,9 +61,11 @@ class SettingAdmin(admin.ModelAdmin):
         if request.method == 'POST':
             form = ModelForm(request.POST, request.FILES)
             if form.save():
-                pass
+                msg = form.get_message(messages.SUCCESS)
+                messages.add_message(request, messages.SUCCESS, msg)
             else:
-                pass
+                msg = form.get_message(messages.ERROR)
+                messages.add_message(request, messages.ERROR, msg)
         else:
             form = ModelForm(initial=initial)
         context = dict(

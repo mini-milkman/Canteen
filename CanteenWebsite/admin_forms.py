@@ -2,6 +2,7 @@
 import threading
 
 from django import forms
+from django.contrib import messages
 
 from CanteenWebsite.utils.data_importers import XlsDataImporter
 from CanteenWebsite.utils.functions import setting_get
@@ -10,7 +11,19 @@ from CanteenWebsite.utils.functions import setting_set
 from CanteenWebsite.utils.functions import setting_set_json
 
 
-class OptionsForm(forms.Form):
+class MessageMixin:
+    def get_message(self, message_type):
+        msg = {
+            messages.SUCCESS: "设置保存成功",
+            messages.ERROR: "设置保存失败"
+        }
+        if message_type in msg:
+            return msg[message_type]
+        else:
+            return str(message_type)
+
+
+class OptionsForm(forms.Form, MessageMixin):
     site_name = forms.CharField(
         label='站点名称',
         initial=setting_get("site_name"),
@@ -69,7 +82,7 @@ class OptionsForm(forms.Form):
         return save_succeed
 
 
-class DataImportOptionForm(forms.Form):
+class DataImportOptionForm(forms.Form, MessageMixin):
     column_index = forms.CharField(
         label="文件导入结构",
         initial=str(setting_get_json("column_index")).strip('[]'),
@@ -157,7 +170,7 @@ class DataImportOptionForm(forms.Form):
         return save_succeed
 
 
-class DataImportForm(forms.Form):
+class DataImportForm(forms.Form, MessageMixin):
     file = forms.FileField(
         label="选择文件"
     )
@@ -176,3 +189,13 @@ class DataImportForm(forms.Form):
             th.start()
             save_succeed = True
         return save_succeed
+
+    def get_message(self, message_type):
+        msg = {
+            messages.SUCCESS: "数据上传成功！\n导入中……",
+            messages.ERROR: "数据上传失败"
+        }
+        if message_type in msg:
+            return msg[message_type]
+        else:
+            return str(message_type)
