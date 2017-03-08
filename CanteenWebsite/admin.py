@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from functools import update_wrapper
+
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
@@ -48,11 +50,18 @@ class SettingAdmin(admin.ModelAdmin):
         return {}
 
     def get_urls(self):
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+
+            wrapper.model_admin = self
+            return update_wrapper(wrapper, view)
+
         urls = super(SettingAdmin, self).get_urls()
         my_urls = [
-            url(r'^general_options/$', self.general_options, name="general_options"),
-            url(r'^data_import_options/$', self.data_import_options, name="data_import_options"),
-            url(r'^data_import/$', self.data_import, name="data_import")
+            url(r'^general_options/$', wrap(self.general_options), name="general_options"),
+            url(r'^data_import_options/$', wrap(self.data_import_options), name="data_import_options"),
+            url(r'^data_import/$', wrap(self.data_import), name="data_import")
         ]
         return my_urls + urls
 
