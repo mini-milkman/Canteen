@@ -9,36 +9,38 @@
             <i class="material-icons">apps</i>管理首页
         </a>
     </li>
-    {% url 'admin:general_options' as url_general_options %}
-    {% url 'admin:data_import_options' as url_data_import_options %}
-    {% url 'admin:data_import' as url_data_import %}
-    {% if request.path == url_general_options or request.path == url_data_import_options or request.path == url_data_import %}
-        {% define "active" as active_tag %}
-    {% else %}
-        {% define "" as active_tag %}
+    {% if user.is_authenticated %}
+        {% url 'admin:general_options' as url_general_options %}
+        {% url 'admin:data_import_options' as url_data_import_options %}
+        {% url 'admin:data_import' as url_data_import %}
+        {% if request.path == url_general_options or request.path == url_data_import_options or request.path == url_data_import %}
+            {% define "active" as active_tag %}
+        {% else %}
+            {% define "" as active_tag %}
+        {% endif %}
+        <li class="{{ active_tag }}">
+            <ul class="collapsible collapsible-accordion">
+                <li>
+                    <a class="collapsible-header {{ active_tag }}">
+                        <i class="material-icons">view_quilt</i> 站点设置
+                    </a>
+                    <div class="collapsible-body" {% if active_tag %} style="display:block" {% endif %}>
+                        <ul>
+                            <li class="{% ifequal request.path url_general_options %}active{% endifequal %}">
+                                <a href="{{ url_general_options }}">站点设置</a>
+                            </li>
+                            <li class="{% ifequal request.path url_data_import_options %}active{% endifequal %}">
+                                <a href="{{ url_data_import_options }}">导入设置</a>
+                            </li>
+                            <li class="{% ifequal request.path url_data_import %}active{% endifequal %}">
+                                <a href="{{ url_data_import }}">数据导入</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
     {% endif %}
-    <li class="{{ active_tag }}">
-        <ul class="collapsible collapsible-accordion">
-            <li>
-                <a class="collapsible-header {{ active_tag }}">
-                    <i class="material-icons">view_quilt</i> 站点设置
-                </a>
-                <div class="collapsible-body" {% if active_tag %} style="display:block" {% endif %}>
-                    <ul>
-                        <li class="{% ifequal request.path url_general_options %}active{% endifequal %}">
-                            <a href="{{ url_general_options }}">站点设置</a>
-                        </li>
-                        <li class="{% ifequal request.path url_data_import_options %}active{% endifequal %}">
-                            <a href="{{ url_data_import_options }}">导入设置</a>
-                        </li>
-                        <li class="{% ifequal request.path url_data_import %}active{% endifequal %}">
-                            <a href="{{ url_data_import }}">数据导入</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </li>
     {% get_app_list request as app_list %}
     {% for app in app_list %}
         <li {% if app.active %}class="active"{% endif %}>
