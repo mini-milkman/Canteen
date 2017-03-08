@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from CanteenWebsite.utils.functions import setting_get, setting_get_json
 from .admin_forms import OptionsForm, DataImportOptionForm, DataImportForm
 from .models import Category
 from .models import Goods
@@ -57,9 +56,10 @@ class SettingAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    def general_form(self, request, ModelForm, form_url="", extra_context=None, title="设置", initial={}):
+    # 几个Form通用的东西
+    def general_form(self, request, form_class, form_url="", extra_context=None, title="设置"):
         if request.method == 'POST':
-            form = ModelForm(request.POST, request.FILES)
+            form = form_class(request.POST, request.FILES)
             if form.save():
                 msg = form.get_message(messages.SUCCESS)
                 messages.add_message(request, messages.SUCCESS, msg)
@@ -67,7 +67,8 @@ class SettingAdmin(admin.ModelAdmin):
                 msg = form.get_message(messages.ERROR)
                 messages.add_message(request, messages.ERROR, msg)
         else:
-            form = ModelForm(initial=initial)
+            initial_data = form_class.get_initial_data()
+            form = form_class(initial=initial_data)
         context = dict(
             self.admin_site.each_context(request),
             has_file_field=True,
@@ -81,47 +82,20 @@ class SettingAdmin(admin.ModelAdmin):
                                 context
                                 )
 
+    # 自定义的Form
     def general_options(self, request, extra_context=None):
-        if request.method == 'POST':
-            initial_data = None
-        else:
-            initial_data = dict(
-                site_name=setting_get("site_name"),
-                site_slogan=setting_get("site_slogan"),
-                index_page=setting_get("index_page"),
-                goods_per_page=int(setting_get("goods_per_page", 50)),
-                goods_sort_strategy=setting_get("goods_sort_strategy"),
-                goods_list_style=setting_get("goods_list_style"),
-            )
         return self.general_form(request,
                                  OptionsForm,
                                  form_url=reverse("admin:general_options"),
                                  extra_context=extra_context,
-                                 title="基本设置",
-                                 initial=initial_data)
+                                 title="基本设置")
 
     def data_import_options(self, request, extra_context=None):
-        if request.method == 'POST':
-            initial_data = None
-        else:
-            initial_data = dict(
-                column_index=str(setting_get_json("column_index")).strip('[]'),
-                delete_before_import=setting_get_json("delete_before_import"),
-                blacklist_category_active=setting_get_json("blacklist_category_active"),
-                blacklist_category=','.join(setting_get_json("blacklist_category", [])),
-                whitelist_category_active=setting_get_json("whitelist_category_active"),
-                whitelist_category=','.join(setting_get_json("whitelist_category", [])),
-                blacklist_goods_active=setting_get_json("blacklist_goods_active"),
-                blacklist_goods=','.join(setting_get_json("blacklist_goods", [])),
-                whitelist_goods_active=setting_get_json("whitelist_goods_active"),
-                whitelist_goods=','.join(setting_get_json("whitelist_goods", [])),
-            )
         return self.general_form(request,
                                  DataImportOptionForm,
                                  form_url=reverse("admin:data_import_options"),
                                  extra_context=extra_context,
-                                 title="数据导入设置",
-                                 initial=initial_data)
+                                 title="数据导入设置")
 
     def data_import(self, request, extra_context=None):
         return self.general_form(request,

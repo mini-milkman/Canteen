@@ -26,18 +26,16 @@ class MessageMixin:
 class OptionsForm(forms.Form, MessageMixin):
     site_name = forms.CharField(
         label='站点名称',
-        initial=setting_get("site_name"),
         max_length=100
     )
     site_slogan = forms.CharField(
         label="站点副标题",
-        initial=setting_get("site_slogan"),
         max_length=100,
         required=False
     )
     index_page = forms.ChoiceField(
         label="首页显示内容",
-        initial=setting_get("index_page"),
+        initial="random",
         choices=(
             ('random', '随机'),
             ('blank', '空白'),
@@ -45,12 +43,12 @@ class OptionsForm(forms.Form, MessageMixin):
     )
     goods_per_page = forms.IntegerField(
         label="每页显示商品数量",
-        initial=int(setting_get("goods_per_page", 50)),
+        initial=50,
         min_value=1
     )
     goods_sort_strategy = forms.ChoiceField(
         label="商品排序方式",
-        initial=setting_get("goods_sort_strategy"),
+        initial='None',
         choices=(
             ('None', '随机/不排序'),
             ('id', '商品ID'),
@@ -66,12 +64,24 @@ class OptionsForm(forms.Form, MessageMixin):
     )
     goods_list_style = forms.ChoiceField(
         label="商品显示样式",
-        initial=setting_get("goods_list_style"),
+        initial='style_1',
         choices=(
             ('style_1', '上图下介绍'),
             ('style_2', '左图右介绍'),
         )
     )
+
+    @classmethod
+    def get_initial_data(cls):
+        initial_data = dict(
+            site_name=setting_get("site_name"),
+            site_slogan=setting_get("site_slogan"),
+            index_page=setting_get("index_page"),
+            goods_per_page=int(setting_get("goods_per_page", 50)),
+            goods_sort_strategy=setting_get("goods_sort_strategy"),
+            goods_list_style=setting_get("goods_list_style"),
+        )
+        return initial_data
 
     def save(self):
         save_succeed = False
@@ -85,35 +95,32 @@ class OptionsForm(forms.Form, MessageMixin):
 class DataImportOptionForm(forms.Form, MessageMixin):
     column_index = forms.CharField(
         label="文件导入结构",
-        initial=str(setting_get_json("column_index")).strip('[]'),
         max_length=1000
     )
     delete_before_import = forms.BooleanField(
         label="导入前清空",
-        initial=setting_get_json("delete_before_import"),
+        initial=False,
         required=False
     )
 
     # 分类黑白名单
     blacklist_category_active = forms.BooleanField(
         label="使用分类黑名单",
-        initial=setting_get_json("blacklist_category_active"),
+        initial=False,
         required=False
     )
     blacklist_category = forms.CharField(
         label="分类黑名单",
-        initial=','.join(setting_get_json("blacklist_category", [])),
         widget=forms.Textarea,
         required=False
     )
     whitelist_category_active = forms.BooleanField(
         label="使用分类白名单",
-        initial=setting_get_json("whitelist_category_active"),
+        initial=False,
         required=False
     )
     whitelist_category = forms.CharField(
         label="分类白名单",
-        initial=','.join(setting_get_json("whitelist_category", [])),
         widget=forms.Textarea,
         required=False
     )
@@ -121,26 +128,40 @@ class DataImportOptionForm(forms.Form, MessageMixin):
     # 商品黑白名单
     blacklist_goods_active = forms.BooleanField(
         label="使用商品黑名单",
-        initial=setting_get_json("blacklist_goods_active"),
+        initial=False,
         required=False
     )
     blacklist_goods = forms.CharField(
         label="商品黑名单",
-        initial=','.join(setting_get_json("blacklist_goods", [])),
         widget=forms.Textarea,
         required=False
     )
     whitelist_goods_active = forms.BooleanField(
         label="使用商品白名单",
-        initial=setting_get_json("whitelist_goods_active"),
+        initial=False,
         required=False
     )
     whitelist_goods = forms.CharField(
         label="商品白名单",
-        initial=','.join(setting_get_json("whitelist_goods", [])),
         widget=forms.Textarea,
         required=False
     )
+
+    @classmethod
+    def get_initial_data(cls):
+        initial_data = dict(
+            column_index=str(setting_get_json("column_index")).strip('[]'),
+            delete_before_import=setting_get_json("delete_before_import"),
+            blacklist_category_active=setting_get_json("blacklist_category_active"),
+            blacklist_category=','.join(setting_get_json("blacklist_category", [])),
+            whitelist_category_active=setting_get_json("whitelist_category_active"),
+            whitelist_category=','.join(setting_get_json("whitelist_category", [])),
+            blacklist_goods_active=setting_get_json("blacklist_goods_active"),
+            blacklist_goods=','.join(setting_get_json("blacklist_goods", [])),
+            whitelist_goods_active=setting_get_json("whitelist_goods_active"),
+            whitelist_goods=','.join(setting_get_json("whitelist_goods", [])),
+        )
+        return initial_data
 
     def save(self):
         save_succeed = False
@@ -189,6 +210,11 @@ class DataImportForm(forms.Form, MessageMixin):
             th.start()
             save_succeed = True
         return save_succeed
+
+    @classmethod
+    def get_initial_data(cls):
+        initial_data = dict()
+        return initial_data
 
     def get_message(self, message_type):
         msg = {
