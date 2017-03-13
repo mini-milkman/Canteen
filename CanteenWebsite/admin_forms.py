@@ -70,6 +70,11 @@ class OptionsForm(forms.Form, MessageMixin):
             ('style_2', '左图右介绍'),
         )
     )
+    use_goods_detail_view = forms.BooleanField(
+        label="使用商品详情页视图",
+        initial=False,
+        required=False
+    )
 
     @classmethod
     def get_initial_data(cls):
@@ -80,14 +85,21 @@ class OptionsForm(forms.Form, MessageMixin):
             goods_per_page=int(setting_get("goods_per_page", 50)),
             goods_sort_strategy=setting_get("goods_sort_strategy"),
             goods_list_style=setting_get("goods_list_style"),
+            use_goods_detail_view=setting_get_json("use_goods_detail_view"),
         )
         return initial_data
 
     def save(self):
         save_succeed = False
         if self.is_valid():
-            for key, value in self.cleaned_data.items():
-                setting_set(key, value)
+            for key in ["site_name", "site_slogan", "index_page",
+                        "goods_per_page", "goods_sort_strategy",
+                        "goods_list_style"]:
+                setting_set(key, self.cleaned_data[key])
+
+            for key in ["use_goods_detail_view"]:
+                setting_set_json(key, self.cleaned_data[key])
+
             save_succeed = True
         return save_succeed
 

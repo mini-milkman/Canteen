@@ -22,6 +22,8 @@ class Command(BaseCommand):
         setting_set("goods_sort_strategy", "None")
         # 商品显示方式
         setting_set("goods_list_style", "style_1")
+        # 使用商品详情页视图
+        setting_set_json("use_goods_detail_view", False)
 
         # 文件结构
         setting_set_json("column_index", [0, 1, 2, 4, 5, 6, 8, 9, 12, 13, 17, 18, 19, 20, 21])
