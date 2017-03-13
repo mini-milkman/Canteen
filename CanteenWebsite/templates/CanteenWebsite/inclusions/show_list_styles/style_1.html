@@ -1,9 +1,17 @@
 {% for goods in goods_list %}
     <div class="col s6 m6 l4">
         <div class="card medium hoverable">
-            <div class="card-image">
-                <img src="{{ goods.picture }}">
-            </div>
+            {% if use_goods_detail_view %}
+                <a href="{% url 'CanteenWebsite:detail' goods.id %}">
+                    <div class="card-image">
+                        <img src="{{ goods.picture }}">
+                    </div>
+                </a>
+            {% else %}
+                <div class="card-image">
+                    <img src="{{ goods.picture }}">
+                </div>
+            {% endif %}
             <div class="card-content">
                             <span class=" chip">
                                 券后

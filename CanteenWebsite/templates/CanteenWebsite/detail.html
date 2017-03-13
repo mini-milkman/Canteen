@@ -1,0 +1,48 @@
+{% extends "CanteenWebsite/base.html" %}
+{% load i18n static canteen_website_tags %}
+
+{% block title %}{{ current_goods.name }} - {{ block.super }}{% endblock %}
+
+{% block page_title %}商品详情{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% block result_list %}
+            <div class="col m6 l6">
+                <div class="card medium hoverable">
+                    <div class="card-image">
+                        <img src="{{ current_goods.picture }}">
+                    </div>
+                    <div class="card-content">
+                            <span class=" chip">
+                                券后
+                                <b class="red-text">
+                                    {{ current_goods.price_real|floatformat }}
+                                </b> 元 | {{ current_goods.platform_type }}
+                            </span>
+                        <span>{{ current_goods.name | truncatechars:32 }}</span>
+                        <!-- {{ current_goods.coupon_money }} -->
+                    </div>
+                    <div class="card-tabs ">
+                        <ul class="tabs tabs-fixed-width">
+                            <li class="tab">
+                                <a class="hide-on-med-and-down" href="{{ current_goods.url_coupon }}"
+                                   target="_blank"> 去领券 </a>
+                            </li>
+                            <li class="tab">
+                                <a class="hide-on-med-and-down" href="{{ current_goods.url_affiliate }}"
+                                   target="_blank"> 去购买 </a>
+                            </li>
+                            <li class="tab hide-on-large-only ">
+                                <a class="center-align"
+                                   href="{{ current_goods.url_affiliate_coupon }}"
+                                   target="_blank"> 领券并购买 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endblock result_list %}
+    </div>
+
+{% endblock %}

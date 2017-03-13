@@ -1,9 +1,17 @@
 {% for goods in goods_list %}
     <div class="col s12 m12 l6">
         <div class="card horizontal small hoverable">
-            <div class="card-image">
-                <img src="{{ goods.picture }}">
-            </div>
+            {% if use_goods_detail_view %}
+                <a href="{% url 'CanteenWebsite:detail' goods.id %}">
+                    <div class="card-image">
+                        <img src="{{ goods.picture }}">
+                    </div>
+                </a>
+            {% else %}
+                <div class="card-image">
+                    <img src="{{ goods.picture }}">
+                </div>
+            {% endif %}
             <div class="card-stacked">
                 <div class="card-content">
                     <p><b>{{ goods.name | truncatechars:32 }}</b></p>
