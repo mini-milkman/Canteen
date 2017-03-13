@@ -94,3 +94,4 @@ ENV/
 # Django
 migrations/
 /static/
+Canteen/settings.py
