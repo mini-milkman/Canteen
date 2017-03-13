@@ -30,4 +30,3 @@ cd install; ./update.sh
 
 1. 建议使用 cron job 来自动清理过期商品： `10 0 * * * cd /var/www/Canteen; python3 manage.py delete_outdate_goods`
 1. 如遇到 pip 错误，请 `sudo apt-get install localepurge` ，选择 `zh_CN.UTF-8` 和 `en_US.UTF-8` ，并 `sudo locale-gen zh_CN.UTF-8 en_US.UTF-8` 
-1. 如果遇到 Apache 长时间无响应，请在站点的 `.conf` 文件中加入 `WSGIApplicationGroup %{GLOBAL}`
